@@ -1,0 +1,28 @@
+# 广播前缀列表，text 支持使用 & 颜色代码。
+# random 为 true 时会加入随机池，false 时只能通过对应的数字指令调用。
+# /notie <内容> 会从 random: true 的前缀中随机选择一个。
+# /notie1 <内容> 使用第一个，/notie2 <内容> 使用第二个，以此类推。
+prefixes:
+  - text: "&6[公告]&r"
+    random: true
+  - text: "&b[提示]&r"
+    random: true
+  - text: "&d[通知]&r"
+    random: true
+  # 这个前缀不会被 /notie 随机选中，只能通过 /notie4 调用。
+  - text: "&c[特殊通知]&r"
+    random: false
+
+# 前缀和正文之间的内容，默认是一个空格。
+separator: " "
+
+# 是否允许指令正文使用 & 颜色代码。
+allow-message-colors: true
+
+messages:
+  usage: "&c用法: /notie <内容> 或 /notie1 <内容>"
+  no-prefixes: "&c配置文件中没有可用的前缀。"
+  no-random-prefixes: "&c配置文件中没有参与随机的前缀。"
+  prefix-not-found: "&c前缀 {number} 不存在，目前共有 {count} 个前缀。"
+  # 留空表示广播成功后不额外提示发送者。
+  success: ""
