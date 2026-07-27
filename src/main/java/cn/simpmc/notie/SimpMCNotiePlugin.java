@@ -82,9 +82,8 @@ public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecut
 
         String separator = getConfig().getString("separator", " ");
         String content = String.join(" ", args);
-        boolean allowMessageColors = getConfig().getBoolean("allow-message-colors", true);
 
-        Bukkit.broadcast(formatBroadcast(prefix.text(), separator, content, allowMessageColors));
+        Bukkit.broadcast(formatBroadcast(prefix.text(), separator, content));
 
         String success = getConfig().getString("messages.success", "");
         if (success != null && !success.isBlank()) {
@@ -146,17 +145,7 @@ public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecut
     }
 
     static Component formatBroadcast(String prefix, String separator, String content) {
-        return formatBroadcast(prefix, separator, content, true);
-    }
-
-    static Component formatBroadcast(
-            String prefix, String separator, String content, boolean allowMessageColors) {
-        if (allowMessageColors) {
-            return parseFormattedText(prefix + separator + content);
-        }
-        return Component.empty()
-                .append(parseFormattedText(prefix))
-                .append(Component.text(separator + content));
+        return parseFormattedText(prefix + separator + content);
     }
 
     private static Component color(String text) {

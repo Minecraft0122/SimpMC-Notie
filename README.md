@@ -85,7 +85,7 @@ prefixes:
     random: false
 ```
 
-`allow-message-colors: false` 会禁止解析指令正文中的所有颜色和 MiniMessage 标签，但不会影响配置文件中的前缀。MiniMessage 使用纯文字格式预设，支持颜色、渐变和彩虹等显示效果，不接受点击命令、悬浮事件或 NBT 等交互标签。
+前缀、提示语和指令正文始终解析上述颜色及格式，无需额外开关。MiniMessage 使用纯文字格式预设，支持颜色、渐变和彩虹等显示效果，不接受点击命令、悬浮事件或 NBT 等交互标签。
 
 如需自行构建，请使用 Java 25 或更高版本运行 `mvn clean package`。插件面向 Folia 26.1.2，使用官方 `folia-api 26.1.2.build.8-stable` 构建，并声明了 Folia 区域化多线程支持。运行时不依赖 EssentialsX。
 

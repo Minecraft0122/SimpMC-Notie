@@ -19,10 +19,6 @@ prefixes:
 # 前缀和正文之间的内容，默认是一个空格。
 separator: " "
 
-# 是否允许指令正文解析传统颜色、十六进制颜色和 MiniMessage。
-# false 时正文中的所有格式标记都会作为普通文字显示；配置中的前缀仍会解析格式。
-allow-message-colors: true
-
 messages:
   usage: "&c用法: /notie <内容> 或 /notie1 <内容>"
   no-prefixes: "&c配置文件中没有可用的前缀。"

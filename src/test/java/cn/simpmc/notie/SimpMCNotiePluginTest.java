@@ -38,14 +38,6 @@ class SimpMCNotiePluginTest {
     }
 
     @Test
-    void preservesAmpersandsWhenMessageColorsAreDisabled() {
-        Component result = SimpMCNotiePlugin.formatBroadcast(
-                "&6[公告]&r", " ", "A&B &c不是红色", false);
-
-        assertEquals("§6[公告]§r A&B &c不是红色", LEGACY_SECTIONS.serialize(result));
-    }
-
-    @Test
     void supportsTraditionalAmpersandCodes() {
         assertEquals(
                 MINI_MESSAGE.deserialize("<green>绿色 <bold>粗体<reset>"),
