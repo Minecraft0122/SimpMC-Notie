@@ -1,5 +1,7 @@
 # SimpMC-Notie
 
+[![Build and Release](https://github.com/Minecraft0122/SimpMC-Notie/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/Minecraft0122/SimpMC-Notie/actions/workflows/build-and-release.yml)
+
 > A Plugin For SimpMC Network.
 
 一个支持随机或指定前缀的 Folia 全服广播插件。
@@ -55,3 +57,9 @@ prefixes:
 插件面向 Folia 26.1.2，使用官方 `folia-api 26.1.2.build.8-stable` 构建，并声明了 Folia 区域化多线程支持。运行时不依赖 EssentialsX。
 
 作者：Minecraft0122, SimpMC, GPT-5.6
+
+## 自动构建和发布
+
+- 推送到 `main` 或提交 Pull Request 时，会自动使用 Java 25 构建、运行测试并上传 JAR 产物。
+- 推送形如 `v1.3.0` 的版本标签时，会自动创建 GitHub Release，并把构建出的 JAR 作为发布附件。
+- Actions 构建产物保留 30 天；GitHub Release 附件长期保留。
