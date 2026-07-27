@@ -1,4 +1,7 @@
-# 广播前缀列表，text 支持使用 & 颜色代码。
+# 广播前缀列表，text 支持以下格式，且可以混合使用：
+# - 传统颜色代码：&a、&6、&l、&r 等
+# - 十六进制颜色：&#12ABEF 或 &x&1&2&A&B&E&F
+# - MiniMessage：<red>、<#12ABEF>、<gradient:red:blue>文字</gradient> 等
 # random 为 true 时会加入随机池，false 时只能通过对应的数字指令调用。
 # /notie <内容> 会从 random: true 的前缀中随机选择一个。
 # /notie1 <内容> 使用第一个，/notie2 <内容> 使用第二个，以此类推。
@@ -16,7 +19,8 @@ prefixes:
 # 前缀和正文之间的内容，默认是一个空格。
 separator: " "
 
-# 是否允许指令正文使用 & 颜色代码。
+# 是否允许指令正文解析传统颜色、十六进制颜色和 MiniMessage。
+# false 时正文中的所有格式标记都会作为普通文字显示；配置中的前缀仍会解析格式。
 allow-message-colors: true
 
 messages:

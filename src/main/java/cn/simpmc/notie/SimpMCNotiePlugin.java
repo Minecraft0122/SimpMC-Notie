@@ -7,8 +7,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,8 +21,25 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecutor {
 
-    private static final LegacyComponentSerializer LEGACY_COLORS =
-            LegacyComponentSerializer.legacyAmpersand();
+    private static final TagResolver FORMATTING_TAGS = TagResolver.resolver(
+            StandardTags.color(),
+            StandardTags.decorations(),
+            StandardTags.font(),
+            StandardTags.gradient(),
+            StandardTags.rainbow(),
+            StandardTags.transition(),
+            StandardTags.pride(),
+            StandardTags.shadowColor(),
+            StandardTags.reset(),
+            StandardTags.newline());
+    private static final MiniMessage MINI_MESSAGE =
+            MiniMessage.builder().tags(FORMATTING_TAGS).build();
+    private static final Pattern BUNGEE_HEX =
+            Pattern.compile("(?i)&x(?:&[0-9a-f]){6}");
+    private static final Pattern AMPERSAND_HEX =
+            Pattern.compile("(?i)&#([0-9a-f]{6})");
+    private static final Pattern LEGACY_CODE =
+            Pattern.compile("(?i)&([0-9a-fk-or])");
 
     record PrefixDefinition(String text, boolean randomEligible) {}
 
@@ -130,15 +151,72 @@ public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecut
 
     static Component formatBroadcast(
             String prefix, String separator, String content, boolean allowMessageColors) {
-        Component message = allowMessageColors
-                ? LEGACY_COLORS.deserialize(content)
-                : Component.text(content);
-        return LEGACY_COLORS.deserialize(prefix)
-                .append(Component.text(separator))
-                .append(message);
+        if (allowMessageColors) {
+            return parseFormattedText(prefix + separator + content);
+        }
+        return Component.empty()
+                .append(parseFormattedText(prefix))
+                .append(Component.text(separator + content));
     }
 
     private static Component color(String text) {
-        return LEGACY_COLORS.deserialize(text);
+        return parseFormattedText(text);
+    }
+
+    static Component parseFormattedText(String text) {
+        return MINI_MESSAGE.deserialize(convertLegacyCodes(text));
+    }
+
+    static String convertLegacyCodes(String text) {
+        String converted = replaceBungeeHex(text);
+        converted = replacePattern(converted, AMPERSAND_HEX, match -> "<#" + match.group(1) + ">");
+        return replacePattern(converted, LEGACY_CODE, match -> legacyTag(match.group(1).charAt(0)));
+    }
+
+    private static String replaceBungeeHex(String text) {
+        return replacePattern(text, BUNGEE_HEX, match -> {
+            String value = match.group();
+            return "<#" + value.charAt(3) + value.charAt(5) + value.charAt(7)
+                    + value.charAt(9) + value.charAt(11) + value.charAt(13) + ">";
+        });
+    }
+
+    private static String replacePattern(
+            String text, Pattern pattern, java.util.function.Function<Matcher, String> replacement) {
+        Matcher matcher = pattern.matcher(text);
+        StringBuilder result = new StringBuilder();
+        while (matcher.find()) {
+            matcher.appendReplacement(result, Matcher.quoteReplacement(replacement.apply(matcher)));
+        }
+        matcher.appendTail(result);
+        return result.toString();
+    }
+
+    private static String legacyTag(char code) {
+        return switch (Character.toLowerCase(code)) {
+            case '0' -> "<black>";
+            case '1' -> "<dark_blue>";
+            case '2' -> "<dark_green>";
+            case '3' -> "<dark_aqua>";
+            case '4' -> "<dark_red>";
+            case '5' -> "<dark_purple>";
+            case '6' -> "<gold>";
+            case '7' -> "<gray>";
+            case '8' -> "<dark_gray>";
+            case '9' -> "<blue>";
+            case 'a' -> "<green>";
+            case 'b' -> "<aqua>";
+            case 'c' -> "<red>";
+            case 'd' -> "<light_purple>";
+            case 'e' -> "<yellow>";
+            case 'f' -> "<white>";
+            case 'k' -> "<obfuscated>";
+            case 'l' -> "<bold>";
+            case 'm' -> "<strikethrough>";
+            case 'n' -> "<underlined>";
+            case 'o' -> "<italic>";
+            case 'r' -> "<reset>";
+            default -> throw new IllegalArgumentException("Unsupported legacy color code: " + code);
+        };
     }
 }

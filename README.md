@@ -63,6 +63,30 @@ prefixes:
 
 可以增删或修改前缀；`random: false` 表示排除出随机池，但对应的 `/notie数字` 仍然有效。`&6` 等传统 Minecraft 颜色代码可用。1.1.0 的纯字符串配置仍然兼容，并默认视为 `random: true`。修改后重启服务端，或使用服务端现有的插件管理方式重新加载本插件。
 
+### 文字格式与颜色
+
+前缀、提示语和指令正文支持混用以下格式：
+
+| 格式 | 示例 |
+| --- | --- |
+| 传统颜色代码 | `&a绿色`、`&6金色`、`&l粗体`、`&r重置` |
+| 十六进制颜色 | `&#12ABEF文字` |
+| Bungee 风格十六进制 | `&x&1&2&A&B&E&F文字` |
+| MiniMessage | `<red>红色</red>`、`<#12ABEF>文字</#12ABEF>` |
+| MiniMessage 渐变 | `<gradient:red:blue>渐变文字</gradient>` |
+
+例如：
+
+```yaml
+prefixes:
+  - text: "<gradient:#00aaff:#aa00ff><bold>[SimpMC]</bold></gradient>"
+    random: true
+  - text: "&#FF8800[活动通知]&r"
+    random: false
+```
+
+`allow-message-colors: false` 会禁止解析指令正文中的所有颜色和 MiniMessage 标签，但不会影响配置文件中的前缀。MiniMessage 使用纯文字格式预设，支持颜色、渐变和彩虹等显示效果，不接受点击命令、悬浮事件或 NBT 等交互标签。
+
 如需自行构建，请使用 Java 25 或更高版本运行 `mvn clean package`。插件面向 Folia 26.1.2，使用官方 `folia-api 26.1.2.build.8-stable` 构建，并声明了 Folia 区域化多线程支持。运行时不依赖 EssentialsX。
 
 作者：Minecraft0122, SimpMC, GPT-5.6
