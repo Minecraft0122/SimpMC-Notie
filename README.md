@@ -4,9 +4,26 @@
 
 > A Plugin For SimpMC Network.
 
-一个支持随机或指定前缀的 Folia 全服广播插件。
+SimpMC-Notie 是一个支持随机或指定前缀的 Folia 全服广播插件，适用于服务器公告、提示和特殊通知。
 
-## 指令
+## 快速开始
+
+1. 从 [Releases](https://github.com/Minecraft0122/SimpMC-Notie/releases/latest) 下载最新版 `SimpMC-Notie-*.jar`。
+2. 确保服务端使用 **Folia 26.1.2** 和 **Java 25**。
+3. 把 JAR 放入服务端的 `plugins` 文件夹，然后重启服务端。
+
+## 使用方法
+
+| 指令 | 用途 |
+| --- | --- |
+| `/notie <内容>` | 从所有 `random: true` 的前缀中随机选择一个并广播 |
+| `/notie1 <内容>` | 固定使用配置中的第一个前缀 |
+| `/notie2 <内容>` | 固定使用配置中的第二个前缀 |
+| `/notie3` 至 `/notie9` | 按数字固定使用对应位置的前缀 |
+
+使用权限为 `simpmc.notie.use`，默认只有 OP 拥有。
+
+### 使用示例
 
 配置中默认有四个前缀：公告、提示、通知和特殊通知。
 
@@ -28,8 +45,6 @@
 
 固定调用第四个“特殊通知”前缀；即使它不参与随机，数字指令仍然可以调用。
 
-权限为 `simpmc.notie.use`，默认只有 OP 拥有。
-
 ## 配置
 
 前缀位于 `plugins/SimpMC-Notie/config.yml` 的 `prefixes` 列表中：
@@ -48,13 +63,7 @@ prefixes:
 
 可以增删或修改前缀；`random: false` 表示排除出随机池，但对应的 `/notie数字` 仍然有效。`&6` 等传统 Minecraft 颜色代码可用。1.1.0 的纯字符串配置仍然兼容，并默认视为 `random: true`。修改后重启服务端，或使用服务端现有的插件管理方式重新加载本插件。
 
-## 安装
-
-1. 使用 Java 25 或更高版本运行 `mvn clean package`。
-2. 把 `target/SimpMC-Notie-1.3.0.jar` 放进服务端的 `plugins` 文件夹。
-3. 重启服务端。
-
-插件面向 Folia 26.1.2，使用官方 `folia-api 26.1.2.build.8-stable` 构建，并声明了 Folia 区域化多线程支持。运行时不依赖 EssentialsX。
+如需自行构建，请使用 Java 25 或更高版本运行 `mvn clean package`。插件面向 Folia 26.1.2，使用官方 `folia-api 26.1.2.build.8-stable` 构建，并声明了 Folia 区域化多线程支持。运行时不依赖 EssentialsX。
 
 作者：Minecraft0122, SimpMC, GPT-5.6
 
