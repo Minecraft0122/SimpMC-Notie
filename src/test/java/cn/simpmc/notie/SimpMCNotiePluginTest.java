@@ -108,15 +108,13 @@ class SimpMCNotiePluginTest {
     }
 
     @Test
-    void numberedCommandSelectsMatchingPrefix() {
+    void notie2SelectsFirstPrefixExcludedFromRandomPool() {
         List<SimpMCNotiePlugin.PrefixDefinition> prefixes = List.of(
-                new SimpMCNotiePlugin.PrefixDefinition("第一个", true),
-                new SimpMCNotiePlugin.PrefixDefinition("第二个", true),
-                new SimpMCNotiePlugin.PrefixDefinition("第三个", true));
+                new SimpMCNotiePlugin.PrefixDefinition("随机一", true),
+                new SimpMCNotiePlugin.PrefixDefinition("专用一", false),
+                new SimpMCNotiePlugin.PrefixDefinition("专用二", false));
 
-        assertEquals("第一个", SimpMCNotiePlugin.selectPrefix(prefixes, "notie1", new Random(1)).text());
-        assertEquals("第三个", SimpMCNotiePlugin.selectPrefix(prefixes, "notie3", new Random(1)).text());
-        assertNull(SimpMCNotiePlugin.selectPrefix(prefixes, "notie4", new Random(1)));
+        assertEquals("专用一", SimpMCNotiePlugin.selectPrefix(prefixes, "notie2", new Random(1)).text());
     }
 
     @Test
@@ -135,16 +133,15 @@ class SimpMCNotiePluginTest {
     }
 
     @Test
-    void numberedCommandCanSelectPrefixExcludedFromRandomPool() {
+    void notie2ReturnsNullWhenThereIsNoDedicatedPrefix() {
         List<SimpMCNotiePlugin.PrefixDefinition> prefixes = List.of(
                 new SimpMCNotiePlugin.PrefixDefinition("普通", true),
-                new SimpMCNotiePlugin.PrefixDefinition("指定指令专用", false));
+                new SimpMCNotiePlugin.PrefixDefinition("也是普通", true));
 
         SimpMCNotiePlugin.PrefixDefinition selected =
                 SimpMCNotiePlugin.selectPrefix(prefixes, "notie2", new Random(1));
 
-        assertNotNull(selected);
-        assertEquals("指定指令专用", selected.text());
+        assertNull(selected);
     }
 
     @Test
@@ -159,6 +156,9 @@ class SimpMCNotiePluginTest {
             assertEquals("26.1.2", description.getAPIVersion());
             assertTrue(description.isFoliaSupported());
             assertTrue(description.getCommands().containsKey("notie"));
+            assertEquals(
+                    List.of("notie2"),
+                    description.getCommands().get("notie").get("aliases"));
         }
     }
 }

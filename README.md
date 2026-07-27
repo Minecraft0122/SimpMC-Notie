@@ -17,11 +17,10 @@ SimpMC-Notie 是一个支持随机或指定前缀的 Folia 全服广播插件，
 | 指令 | 用途 |
 | --- | --- |
 | `/notie <内容>` | 从所有 `random: true` 的前缀中随机选择一个并广播 |
-| `/notie1 <内容>` | 固定使用配置中的第一个前缀 |
-| `/notie2 <内容>` | 固定使用配置中的第二个前缀 |
-| `/notie3` 至 `/notie9` | 按数字固定使用对应位置的前缀 |
+| `/notie2 <内容>` | 固定使用第一个 `random: false` 的专用前缀 |
+| `/notie reload` | 重新读取 `config.yml`，无需重启服务端 |
 
-使用权限为 `simpmc.notie.use`，默认只有 OP 拥有。
+广播权限为 `simpmc.notie.use`，重载权限为 `simpmc.notie.reload`，默认都只有 OP 拥有。
 
 ### 使用示例
 
@@ -34,16 +33,18 @@ SimpMC-Notie 是一个支持随机或指定前缀的 Folia 全服广播插件，
 从配置中所有 `random: true` 的前缀里随机选择一个。特殊通知设置为 `random: false`，因此永远不会在这里出现。
 
 ```text
-/notie1 服务器将在五分钟后重启
+/notie2 这条消息使用专用前缀发出
 ```
 
-固定使用配置中的第一个前缀。`/notie2` 使用第二个，依此类推，最多可通过 `/notie9` 直接指定第九个。
+固定调用第一个 `random: false` 的“特殊通知”前缀，它永远不会参与 `/notie` 的随机选择。
+
+修改配置文件后输入：
 
 ```text
-/notie4 这条消息只会在明确调用时发出
+/notie reload
 ```
 
-固定调用第四个“特殊通知”前缀；即使它不参与随机，数字指令仍然可以调用。
+插件会立即重新读取全部前缀、分隔符和提示消息。
 
 ## 配置
 
@@ -61,7 +62,7 @@ prefixes:
     random: false
 ```
 
-可以增删或修改前缀；`random: false` 表示排除出随机池，但对应的 `/notie数字` 仍然有效。`&6` 等传统 Minecraft 颜色代码可用。1.1.0 的纯字符串配置仍然兼容，并默认视为 `random: true`。修改后重启服务端，或使用服务端现有的插件管理方式重新加载本插件。
+可以增删或修改前缀；`random: false` 表示排除出随机池，并作为 `/notie2` 的专用前缀。如果配置了多个 `random: false`，`/notie2` 使用其中第一个。`&6` 等传统 Minecraft 颜色代码可用。1.1.0 的纯字符串配置仍然兼容，并默认视为 `random: true`。修改后使用 `/notie reload` 即可生效。
 
 ### 文字格式与颜色
 

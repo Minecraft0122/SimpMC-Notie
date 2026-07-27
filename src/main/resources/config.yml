@@ -2,9 +2,9 @@
 # - 传统颜色代码：&a、&6、&l、&r 等
 # - 十六进制颜色：&#12ABEF 或 &x&1&2&A&B&E&F
 # - MiniMessage：<red>、<#12ABEF>、<gradient:red:blue>文字</gradient> 等
-# random 为 true 时会加入随机池，false 时只能通过对应的数字指令调用。
+# random 为 true 时会加入随机池，false 时作为 /notie2 的专用前缀。
 # /notie <内容> 会从 random: true 的前缀中随机选择一个。
-# /notie1 <内容> 使用第一个，/notie2 <内容> 使用第二个，以此类推。
+# /notie2 <内容> 固定使用列表中第一个 random: false 的前缀。
 prefixes:
   - text: "&6[公告]"
     random: true
@@ -12,7 +12,7 @@ prefixes:
     random: true
   - text: "&d[通知]"
     random: true
-  # 这个前缀不会被 /notie 随机选中，只能通过 /notie4 调用。
+  # 这个前缀不会被 /notie 随机选中，只能通过 /notie2 调用。
   - text: "&c[特殊通知]"
     random: false
 
@@ -20,9 +20,11 @@ prefixes:
 separator: " "
 
 messages:
-  usage: "&c用法: /notie <内容> 或 /notie1 <内容>"
+  usage: "&c用法: /notie <内容>、/notie2 <内容> 或 /notie reload"
   no-prefixes: "&c配置文件中没有可用的前缀。"
   no-random-prefixes: "&c配置文件中没有参与随机的前缀。"
-  prefix-not-found: "&c前缀 {number} 不存在，目前共有 {count} 个前缀。"
+  no-fixed-prefix: "&c配置文件中没有 random: false 的专用前缀。"
+  reload-success: "&aSimpMC-Notie 配置已重载。"
+  reload-no-permission: "&c你没有权限重载此插件。"
   # 留空表示广播成功后不额外提示发送者。
   success: ""

@@ -1,5 +1,5 @@
 name: SimpMC-Notie
-version: '1.4.2'
+version: '1.5.0'
 main: cn.simpmc.notie.SimpMCNotiePlugin
 api-version: '26.1.2'
 folia-supported: true
@@ -8,12 +8,15 @@ description: A Plugin For SimpMC Network.
 
 commands:
   notie:
-    description: 使用随机或指定前缀向全服广播消息
+    description: 使用随机或专用前缀向全服广播消息
     usage: /notie <内容>
-    aliases: [notie1, notie2, notie3, notie4, notie5, notie6, notie7, notie8, notie9]
+    aliases: [notie2]
     permission: simpmc.notie.use
 
 permissions:
   simpmc.notie.use:
     description: 允许使用 SimpMC-Notie 广播
+    default: op
+  simpmc.notie.reload:
+    description: 允许使用 /notie reload 重载配置
     default: op

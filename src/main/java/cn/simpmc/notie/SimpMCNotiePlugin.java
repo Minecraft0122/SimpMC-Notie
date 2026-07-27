@@ -15,11 +15,12 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecutor {
+public final class SimpMCNotiePlugin extends JavaPlugin implements TabExecutor {
 
     private static final TagResolver FORMATTING_TAGS = TagResolver.resolver(
             StandardTags.color(),
@@ -48,12 +49,29 @@ public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecut
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        Objects.requireNonNull(getCommand("notie"), "Command 'notie' is missing from plugin.yml")
-                .setExecutor(this);
+        PluginCommand command = Objects.requireNonNull(
+                getCommand("notie"), "Command 'notie' is missing from plugin.yml");
+        command.setExecutor(this);
+        command.setTabCompleter(this);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public synchronized boolean onCommand(
+            CommandSender sender, Command command, String label, String[] args) {
+        if (label.equalsIgnoreCase("notie")
+                && args.length == 1
+                && args[0].equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("simpmc.notie.reload")) {
+                sender.sendMessage(color(getConfig().getString(
+                        "messages.reload-no-permission", "&c你没有权限重载此插件。")));
+                return true;
+            }
+            reloadConfig();
+            sender.sendMessage(color(getConfig().getString(
+                    "messages.reload-success", "&aSimpMC-Notie 配置已重载。")));
+            return true;
+        }
+
         if (args.length == 0) {
             sender.sendMessage(color(getConfig().getString(
                     "messages.usage", "&c用法: /" + label + " <内容>")));
@@ -69,16 +87,13 @@ public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecut
 
         PrefixDefinition prefix = selectPrefix(prefixes, label, ThreadLocalRandom.current());
         if (prefix == null) {
-            if (requestedIndex(label) == -1) {
-                sender.sendMessage(color(getConfig().getString(
-                        "messages.no-random-prefixes", "&c配置文件中没有参与随机的前缀。")));
-                return true;
-            }
-            String message = getConfig().getString(
-                    "messages.prefix-not-found", "&c前缀 {number} 不存在，目前共有 {count} 个前缀。");
-            sender.sendMessage(color(message
-                    .replace("{number}", requestedNumber(label))
-                    .replace("{count}", Integer.toString(prefixes.size()))));
+            String messagePath = label.equalsIgnoreCase("notie2")
+                    ? "messages.no-fixed-prefix"
+                    : "messages.no-random-prefixes";
+            String fallback = label.equalsIgnoreCase("notie2")
+                    ? "&c配置文件中没有 random: false 的专用前缀。"
+                    : "&c配置文件中没有参与随机的前缀。";
+            sender.sendMessage(color(getConfig().getString(messagePath, fallback)));
             return true;
         }
 
@@ -92,6 +107,18 @@ public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecut
             sender.sendMessage(color(success));
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(
+            CommandSender sender, Command command, String alias, String[] args) {
+        if (alias.equalsIgnoreCase("notie")
+                && args.length == 1
+                && sender.hasPermission("simpmc.notie.reload")
+                && "reload".startsWith(args[0].toLowerCase(Locale.ROOT))) {
+            return List.of("reload");
+        }
+        return List.of();
     }
 
     private List<PrefixDefinition> loadPrefixes() {
@@ -118,32 +145,20 @@ public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecut
 
     static PrefixDefinition selectPrefix(
             List<PrefixDefinition> prefixes, String label, RandomGenerator random) {
-        int requestedIndex = requestedIndex(label);
-        if (requestedIndex == -1) {
-            List<PrefixDefinition> randomPrefixes = prefixes.stream()
-                    .filter(PrefixDefinition::randomEligible)
-                    .toList();
-            if (randomPrefixes.isEmpty()) {
-                return null;
-            }
-            return randomPrefixes.get(random.nextInt(randomPrefixes.size()));
+        if (label.equalsIgnoreCase("notie2")) {
+            return prefixes.stream()
+                    .filter(prefix -> !prefix.randomEligible())
+                    .findFirst()
+                    .orElse(null);
         }
-        if (requestedIndex >= prefixes.size()) {
+
+        List<PrefixDefinition> randomPrefixes = prefixes.stream()
+                .filter(PrefixDefinition::randomEligible)
+                .toList();
+        if (randomPrefixes.isEmpty()) {
             return null;
         }
-        return prefixes.get(requestedIndex);
-    }
-
-    private static int requestedIndex(String label) {
-        String normalized = label.toLowerCase(Locale.ROOT);
-        if (normalized.equals("notie")) {
-            return -1;
-        }
-        return Integer.parseInt(normalized.substring("notie".length())) - 1;
-    }
-
-    private static String requestedNumber(String label) {
-        return label.substring("notie".length());
+        return randomPrefixes.get(random.nextInt(randomPrefixes.size()));
     }
 
     static Component formatBroadcast(String prefix, String separator, String content) {
