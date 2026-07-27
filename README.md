@@ -51,13 +51,13 @@ SimpMC-Notie 是一个支持随机或指定前缀的 Folia 全服广播插件，
 
 ```yaml
 prefixes:
-  - text: "&6[公告]&r"
+  - text: "&6[公告]"
     random: true
-  - text: "&b[提示]&r"
+  - text: "&b[提示]"
     random: true
-  - text: "&d[通知]&r"
+  - text: "&d[通知]"
     random: true
-  - text: "&c[特殊通知]&r"
+  - text: "&c[特殊通知]"
     random: false
 ```
 
@@ -81,11 +81,11 @@ prefixes:
 prefixes:
   - text: "<gradient:#00aaff:#aa00ff><bold>[SimpMC]</bold></gradient>"
     random: true
-  - text: "&#FF8800[活动通知]&r"
+  - text: "&#FF8800[活动通知]"
     random: false
 ```
 
-前缀、提示语和指令正文始终解析上述颜色及格式，无需额外开关。MiniMessage 使用纯文字格式预设，支持颜色、渐变和彩虹等显示效果，不接受点击命令、悬浮事件或 NBT 等交互标签。
+前缀、提示语和指令正文始终解析上述颜色及格式，无需额外开关。前缀的颜色会延续到后面的空格和正文；为了兼容旧配置，即使前缀以 `&r`、`<reset>` 或 `</颜色>` 结尾，插件也会移除末尾边界。正文中的新颜色代码仍可覆盖前缀颜色。MiniMessage 使用纯文字格式预设，支持颜色、渐变和彩虹等显示效果，不接受点击命令、悬浮事件或 NBT 等交互标签。
 
 如需自行构建，请使用 Java 25 或更高版本运行 `mvn clean package`。插件面向 Folia 26.1.2，使用官方 `folia-api 26.1.2.build.8-stable` 构建，并声明了 Folia 区域化多线程支持。运行时不依赖 EssentialsX。
 

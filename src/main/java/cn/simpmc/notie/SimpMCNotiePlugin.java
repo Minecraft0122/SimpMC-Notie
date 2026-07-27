@@ -40,6 +40,8 @@ public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecut
             Pattern.compile("(?i)&#([0-9a-f]{6})");
     private static final Pattern LEGACY_CODE =
             Pattern.compile("(?i)&([0-9a-fk-or])");
+    private static final Pattern TRAILING_STYLE_BOUNDARY = Pattern.compile(
+            "(?i)(?:(?:&|§)r|<reset>|</(?:#[0-9a-f]{6}|[a-z_][a-z0-9_-]*(?::[^>]*)?)>)+$");
 
     record PrefixDefinition(String text, boolean randomEligible) {}
 
@@ -145,7 +147,11 @@ public final class SimpMCNotiePlugin extends JavaPlugin implements CommandExecut
     }
 
     static Component formatBroadcast(String prefix, String separator, String content) {
-        return parseFormattedText(prefix + separator + content);
+        return parseFormattedText(continuePrefixStyle(prefix) + separator + content);
+    }
+
+    static String continuePrefixStyle(String prefix) {
+        return TRAILING_STYLE_BOUNDARY.matcher(prefix).replaceFirst("");
     }
 
     private static Component color(String text) {

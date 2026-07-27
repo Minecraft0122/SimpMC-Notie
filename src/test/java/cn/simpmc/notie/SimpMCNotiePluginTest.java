@@ -23,11 +23,35 @@ class SimpMCNotiePluginTest {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
     @Test
-    void formatsPrefixSeparatorAndContent() {
+    void prefixColorContinuesIntoContentDespiteTrailingReset() {
         Component result = SimpMCNotiePlugin.formatBroadcast(
                 "&6[公告]&r", " ", "服务器将在五分钟后重启");
 
-        assertEquals("§6[公告]§r 服务器将在五分钟后重启", LEGACY_SECTIONS.serialize(result));
+        assertEquals("§6[公告] 服务器将在五分钟后重启", LEGACY_SECTIONS.serialize(result));
+    }
+
+    @Test
+    void closedMiniMessagePrefixColorContinuesIntoContent() {
+        Component result = SimpMCNotiePlugin.formatBroadcast(
+                "<red>[警告]</red>", " ", "请立即回城");
+
+        assertEquals("§c[警告] 请立即回城", LEGACY_SECTIONS.serialize(result));
+    }
+
+    @Test
+    void closedHexPrefixColorContinuesIntoContent() {
+        assertEquals(
+                "<#12ABEF>[通知] 正文",
+                MINI_MESSAGE.serialize(SimpMCNotiePlugin.formatBroadcast(
+                        "<#12ABEF>[通知]</#12ABEF>", " ", "正文")));
+    }
+
+    @Test
+    void contentColorCanOverrideContinuedPrefixColor() {
+        Component result = SimpMCNotiePlugin.formatBroadcast(
+                "&c[警告]&r", " ", "&e请立即回城");
+
+        assertEquals("§c[警告] §e请立即回城", LEGACY_SECTIONS.serialize(result));
     }
 
     @Test

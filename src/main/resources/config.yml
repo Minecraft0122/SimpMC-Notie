@@ -6,14 +6,14 @@
 # /notie <内容> 会从 random: true 的前缀中随机选择一个。
 # /notie1 <内容> 使用第一个，/notie2 <内容> 使用第二个，以此类推。
 prefixes:
-  - text: "&6[公告]&r"
+  - text: "&6[公告]"
     random: true
-  - text: "&b[提示]&r"
+  - text: "&b[提示]"
     random: true
-  - text: "&d[通知]&r"
+  - text: "&d[通知]"
     random: true
   # 这个前缀不会被 /notie 随机选中，只能通过 /notie4 调用。
-  - text: "&c[特殊通知]&r"
+  - text: "&c[特殊通知]"
     random: false
 
 # 前缀和正文之间的内容，默认是一个空格。
