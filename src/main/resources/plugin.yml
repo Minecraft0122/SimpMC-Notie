@@ -1,22 +1,32 @@
-name: SimpMC-Notie
-version: '1.5.0'
-main: cn.simpmc.notie.SimpMCNotiePlugin
+name: SimpMC-Notice
+version: '2.0.0'
+main: cn.simpmc.notice.SimpMCNoticePlugin
 api-version: '26.1.2'
 folia-supported: true
 authors: [Minecraft0122, SimpMC, GPT-5.6]
 description: A Plugin For SimpMC Network.
 
 commands:
-  notie:
-    description: 使用随机或专用前缀向全服广播消息
-    usage: /notie <内容>
-    aliases: [notie2]
-    permission: simpmc.notie.use
+  noti:
+    description: 使用随机前缀广播自定义内容
+    usage: /noti <内容>
+    permission: simpmc.notice.noti
+  notice:
+    description: 使用固定前缀库广播自定义内容
+    usage: /notice <内容>
+    permission: simpmc.notice.notice
+  noticrreload:
+    description: 重载 SimpMC-Notice 配置和三个内容库
+    usage: /noticrreload
+    permission: simpmc.notice.reload
 
 permissions:
-  simpmc.notie.use:
-    description: 允许使用 SimpMC-Notie 广播
+  simpmc.notice.noti:
+    description: 允许使用 /noti
     default: op
-  simpmc.notie.reload:
-    description: 允许使用 /notie reload 重载配置
+  simpmc.notice.notice:
+    description: 允许使用 /notice
+    default: op
+  simpmc.notice.reload:
+    description: 允许使用 /noticrreload
     default: op

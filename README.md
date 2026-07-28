@@ -1,99 +1,100 @@
-# SimpMC-Notie
+# SimpMC-Notice
 
-[![Build and Release](https://github.com/Minecraft0122/SimpMC-Notie/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/Minecraft0122/SimpMC-Notie/actions/workflows/build-and-release.yml)
+[![Build and Release](https://github.com/Minecraft0122/SimpMC-Notice/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/Minecraft0122/SimpMC-Notice/actions/workflows/build-and-release.yml)
 
 > A Plugin For SimpMC Network.
 
-SimpMC-Notie 是一个支持随机或指定前缀的 Folia 全服广播插件，适用于服务器公告、提示和特殊通知。
+SimpMC-Notice 是一个面向 Folia 26.1.2 的全服公告插件，支持定时随机公告、随机前缀广播、固定前缀广播和运行时配置重载。
 
 ## 快速开始
 
-1. 从 [Releases](https://github.com/Minecraft0122/SimpMC-Notie/releases/latest) 下载最新版 `SimpMC-Notie-*.jar`。
+1. 从 [Releases](https://github.com/Minecraft0122/SimpMC-Notice/releases/latest) 下载最新版 `SimpMC-Notice-*.jar`。
 2. 确保服务端使用 **Folia 26.1.2** 和 **Java 25**。
 3. 把 JAR 放入服务端的 `plugins` 文件夹，然后重启服务端。
 
-## 使用方法
+## 指令
 
-| 指令 | 用途 |
-| --- | --- |
-| `/notie <内容>` | 从所有 `random: true` 的前缀中随机选择一个并广播 |
-| `/notie2 <内容>` | 固定使用第一个 `random: false` 的专用前缀 |
-| `/notie reload` | 重新读取 `config.yml`，无需重启服务端 |
+| 指令 | 功能 | 权限 |
+| --- | --- | --- |
+| `/noti <内容>` | 从随机前缀库随机选择前缀并广播内容 | `simpmc.notice.noti` |
+| `/notice <内容>` | 从固定前缀库随机选择前缀并广播内容 | `simpmc.notice.notice` |
+| `/noticrreload` | 重载配置、三个内容库和自动公告时间范围 | `simpmc.notice.reload` |
 
-广播权限为 `simpmc.notie.use`，重载权限为 `simpmc.notie.reload`，默认都只有 OP 拥有。
+所有权限默认仅 OP 拥有。
 
-### 使用示例
-
-配置中默认有四个前缀：公告、提示、通知和特殊通知。
+指令内容可以包含任意数量的空格。例如：
 
 ```text
-/notie 服务器将在五分钟后重启
+/noti 服务器将在十分钟后重新启动，请大家提前保存物品
+/notice 今晚八点将开启限时活动，欢迎大家参加
 ```
 
-从配置中所有 `random: true` 的前缀里随机选择一个。特殊通知设置为 `random: false`，因此永远不会在这里出现。
+## 自动公告
 
-```text
-/notie2 这条消息使用专用前缀发出
-```
+启用后，插件会在配置的最小和最大秒数之间随机等待。到达发送时间时：
 
-固定调用第一个 `random: false` 的“特殊通知”前缀，它永远不会参与 `/notie` 的随机选择。
+1. 检查服务器是否有玩家在线；无人在线时不发送。
+2. 从 `random-prefixes` 随机选择一个前缀。
+3. 从 `random-messages` 随机选择一条消息。
+4. 广播后重新生成下一次随机等待时间。
 
-修改配置文件后输入：
+## 配置和三个内容库
 
-```text
-/notie reload
-```
-
-插件会立即重新读取全部前缀、分隔符和提示消息。
-
-## 配置
-
-前缀位于 `plugins/SimpMC-Notie/config.yml` 的 `prefixes` 列表中：
+三个内容库与自动公告设置都位于 `plugins/SimpMC-Notice/config.yml`：
 
 ```yaml
-prefixes:
-  - text: "&6[公告]"
-    random: true
-  - text: "&b[提示]"
-    random: true
-  - text: "&d[通知]"
-    random: true
-  - text: "&c[特殊通知]"
-    random: false
+# 1. 自动公告和 /noti 使用
+random-prefixes:
+  - "&6[公告]"
+  - "&b[提示]"
+  - "&d[通知]"
+
+# 2. 自动公告使用
+random-messages:
+  - "欢迎来到 SimpMC Network！"
+  - "请文明游戏，并遵守服务器规则。"
+
+# 3. /notice 使用
+fixed-prefixes:
+  - "&c[重要通知]"
+  - "&#FF8800[活动通知]"
+
+announcement:
+  enabled: true
+  interval-seconds:
+    min: 300
+    max: 600
+
+separator: " "
 ```
 
-可以增删或修改前缀；`random: false` 表示排除出随机池，并作为 `/notie2` 的专用前缀。如果配置了多个 `random: false`，`/notie2` 使用其中第一个。`&6` 等传统 Minecraft 颜色代码可用。1.1.0 的纯字符串配置仍然兼容，并默认视为 `random: true`。修改后使用 `/notie reload` 即可生效。
+修改后执行 `/noticrreload` 即可立即刷新三个内容库、提示消息和公告时间范围。
 
-### 文字格式与颜色
+## 颜色和文字格式
 
-前缀、提示语和指令正文支持混用以下格式：
+所有前缀和消息均支持混用：
 
-| 格式 | 示例 |
-| --- | --- |
-| 传统颜色代码 | `&a绿色`、`&6金色`、`&l粗体`、`&r重置` |
-| 十六进制颜色 | `&#12ABEF文字` |
-| Bungee 风格十六进制 | `&x&1&2&A&B&E&F文字` |
-| MiniMessage | `<red>红色</red>`、`<#12ABEF>文字</#12ABEF>` |
-| MiniMessage 渐变 | `<gradient:red:blue>渐变文字</gradient>` |
+- 传统颜色：`&a`、`&6`、`&l`、`&r`
+- 十六进制颜色：`&#12ABEF`
+- Bungee 风格十六进制：`&x&1&2&A&B&E&F`
+- MiniMessage：`<red>`、`<#12ABEF>`、`<gradient:red:blue>渐变</gradient>`
 
-例如：
+前缀颜色会延续到后续正文，正文中的新颜色可以覆盖它。MiniMessage 仅开放文字格式，不允许点击命令、悬浮事件或 NBT 等交互标签。
 
-```yaml
-prefixes:
-  - text: "<gradient:#00aaff:#aa00ff><bold>[SimpMC]</bold></gradient>"
-    random: true
-  - text: "&#FF8800[活动通知]"
-    random: false
+## 自行构建
+
+使用 Java 25 或更高版本运行：
+
+```shell
+mvn clean package
 ```
 
-前缀、提示语和指令正文始终解析上述颜色及格式，无需额外开关。前缀的颜色会延续到后面的空格和正文；为了兼容旧配置，即使前缀以 `&r`、`<reset>` 或 `</颜色>` 结尾，插件也会移除末尾边界。正文中的新颜色代码仍可覆盖前缀颜色。MiniMessage 使用纯文字格式预设，支持颜色、渐变和彩虹等显示效果，不接受点击命令、悬浮事件或 NBT 等交互标签。
-
-如需自行构建，请使用 Java 25 或更高版本运行 `mvn clean package`。插件面向 Folia 26.1.2，使用官方 `folia-api 26.1.2.build.8-stable` 构建，并声明了 Folia 区域化多线程支持。运行时不依赖 EssentialsX。
+产物位于 `target/SimpMC-Notice-2.0.0.jar`。插件使用官方 `folia-api 26.1.2.build.8-stable` 构建，运行时不依赖 EssentialsX。
 
 作者：Minecraft0122, SimpMC, GPT-5.6
 
 ## 自动构建和发布
 
-- 推送到 `main` 或提交 Pull Request 时，会自动使用 Java 25 构建、运行测试并上传 JAR 产物。
-- 推送形如 `v1.3.0` 的版本标签时，会自动创建 GitHub Release，并把构建出的 JAR 作为发布附件。
-- Actions 构建产物保留 30 天；GitHub Release 附件长期保留。
+- 推送到 `main` 或提交 Pull Request 时，GitHub Actions 自动构建、测试并上传 JAR。
+- 推送形如 `v2.0.0` 的版本标签时，自动创建 GitHub Release 并上传 JAR。
+- Actions 临时构建产物保留 30 天；Release 附件长期保留。

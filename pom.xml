@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.simpmc</groupId>
-    <artifactId>simpmc-notie</artifactId>
-    <version>1.5.0</version>
+    <artifactId>simpmc-notice</artifactId>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
 
-    <name>SimpMC-Notie</name>
+    <name>SimpMC-Notice</name>
     <description>A Plugin For SimpMC Network.</description>
 
     <properties>
@@ -40,7 +40,7 @@
     </dependencies>
 
     <build>
-        <finalName>SimpMC-Notie-${project.version}</finalName>
+        <finalName>SimpMC-Notice-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

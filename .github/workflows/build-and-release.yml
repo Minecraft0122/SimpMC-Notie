@@ -37,8 +37,8 @@ jobs:
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v7
         with:
-          name: SimpMC-Notie-${{ github.sha }}
-          path: target/SimpMC-Notie-*.jar
+          name: SimpMC-Notice-${{ github.sha }}
+          path: target/SimpMC-Notice-*.jar
           if-no-files-found: error
           retention-days: 30
           archive: false
@@ -49,8 +49,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: >-
           gh release create "$GITHUB_REF_NAME"
-          target/SimpMC-Notie-*.jar
+          target/SimpMC-Notice-*.jar
           --verify-tag
           --generate-notes
           --title "$GITHUB_REF_NAME"
-

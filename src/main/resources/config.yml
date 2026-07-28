@@ -1,30 +1,40 @@
-# 广播前缀列表，text 支持以下格式，且可以混合使用：
-# - 传统颜色代码：&a、&6、&l、&r 等
-# - 十六进制颜色：&#12ABEF 或 &x&1&2&A&B&E&F
-# - MiniMessage：<red>、<#12ABEF>、<gradient:red:blue>文字</gradient> 等
-# random 为 true 时会加入随机池，false 时作为 /notie2 的专用前缀。
-# /notie <内容> 会从 random: true 的前缀中随机选择一个。
-# /notie2 <内容> 固定使用列表中第一个 random: false 的前缀。
-prefixes:
-  - text: "&6[公告]"
-    random: true
-  - text: "&b[提示]"
-    random: true
-  - text: "&d[通知]"
-    random: true
-  # 这个前缀不会被 /notie 随机选中，只能通过 /notie2 调用。
-  - text: "&c[特殊通知]"
-    random: false
+# SimpMC-Notice 的三个内容库。
+# 所有文本都支持传统 & 颜色、&#RRGGBB、&x&R&R&G&G&B&B 和 MiniMessage。
 
-# 前缀和正文之间的内容，默认是一个空格。
+# 1. 随机前缀库：供自动公告和 /noti 使用。
+random-prefixes:
+  - "&6[公告]"
+  - "&b[提示]"
+  - "&d[通知]"
+
+# 2. 随机消息库：自动公告会从这里随机选择一条消息。
+random-messages:
+  - "欢迎来到 SimpMC Network！"
+  - "请文明游戏，并遵守服务器规则。"
+  - "遇到问题时请及时联系管理员。"
+
+# 3. 固定前缀库：仅供 /notice 使用；有多个时也会随机选择一个。
+fixed-prefixes:
+  - "&c[重要通知]"
+  - "&#FF8800[活动通知]"
+
+# 自动公告设置。
+announcement:
+  enabled: true
+  # 每次公告后都会在此范围内重新随机等待时间，单位为秒。
+  # 到达发送时间时如果没有玩家在线，本次不发送，并重新随机等待。
+  interval-seconds:
+    min: 300
+    max: 600
+
+# 前缀与正文之间的内容。
 separator: " "
 
 messages:
-  usage: "&c用法: /notie <内容>、/notie2 <内容> 或 /notie reload"
-  no-prefixes: "&c配置文件中没有可用的前缀。"
-  no-random-prefixes: "&c配置文件中没有参与随机的前缀。"
-  no-fixed-prefix: "&c配置文件中没有 random: false 的专用前缀。"
-  reload-success: "&aSimpMC-Notie 配置已重载。"
-  reload-no-permission: "&c你没有权限重载此插件。"
-  # 留空表示广播成功后不额外提示发送者。
-  success: ""
+  noti-usage: "&c用法: /noti <内容>"
+  notice-usage: "&c用法: /notice <内容>"
+  empty-random-prefixes: "&c随机前缀库为空。"
+  empty-random-messages: "&c随机消息库为空。"
+  empty-fixed-prefixes: "&c固定前缀库为空。"
+  reload-success: "&aSimpMC-Notice 配置和三个内容库已重载。"
+  reload-failure: "&c配置重载失败，请检查控制台。"
