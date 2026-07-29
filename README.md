@@ -96,12 +96,12 @@ separator: " "
 mvn clean package
 ```
 
-产物位于 `target/SimpMC-Notice-2.0.0.jar`。插件使用官方 `folia-api 26.1.2.build.8-stable` 构建，运行时不依赖 EssentialsX。
+产物位于 `target/SimpMC-Notice-2.0.1.jar`。插件使用官方 `folia-api 26.1.2.build.8-stable` 构建，运行时不依赖 EssentialsX。
 
 作者：Minecraft0122, SimpMC, GPT-5.6
 
 ## 自动构建和发布
 
 - 推送到 `main` 或提交 Pull Request 时，GitHub Actions 自动构建、测试并上传 JAR。
-- 推送形如 `v2.0.0` 的版本标签时，自动创建 GitHub Release 并上传 JAR。
+- 推送形如 `v2.0.1` 的版本标签时，自动创建 GitHub Release 并上传 JAR。
 - Actions 临时构建产物保留 30 天；Release 附件长期保留。

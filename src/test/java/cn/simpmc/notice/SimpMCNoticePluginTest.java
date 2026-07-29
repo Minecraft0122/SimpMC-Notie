@@ -147,7 +147,7 @@ class SimpMCNoticePluginTest {
             PluginDescriptionFile description = new PluginDescriptionFile(input);
 
             assertEquals("SimpMC-Notice", description.getName());
-            assertEquals("2.0.0", description.getVersion());
+            assertEquals("2.0.1", description.getVersion());
             assertEquals("A Plugin For SimpMC Network.", description.getDescription());
             assertEquals(List.of("Minecraft0122", "SimpMC", "GPT-5.6"), description.getAuthors());
             assertEquals("26.1.2", description.getAPIVersion());
