@@ -1,5 +1,5 @@
 # SimpMC-Notice 的三个内容库。
-# 所有文本都支持传统 & 颜色、&#RRGGBB、&x&R&R&G&G&B&B 和 MiniMessage。
+# 所有文本都支持传统 & 颜色、&#RRGGBB、&x&R&R&G&G&B&B、MiniMessage 和 \\n 换行。
 
 # 1. 随机前缀库：供自动公告和 /noti 使用。
 random-prefixes:

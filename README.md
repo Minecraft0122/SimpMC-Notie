@@ -18,7 +18,7 @@ SimpMC-Notice 是一个面向 Folia 26.1.2 的全服公告插件，支持定时�
 | --- | --- | --- |
 | `/noti <内容>` | 从随机前缀库随机选择前缀并广播内容 | `simpmc.notice.noti` |
 | `/notice <内容>` | 从固定前缀库随机选择前缀并广播内容 | `simpmc.notice.notice` |
-| `/noticrreload` | 重载配置、三个内容库和自动公告时间范围 | `simpmc.notice.reload` |
+| `/noticereload` | 重载配置、三个内容库和自动公告时间范围 | `simpmc.notice.reload` |
 
 所有权限默认仅 OP 拥有。
 
@@ -27,6 +27,12 @@ SimpMC-Notice 是一个面向 Folia 26.1.2 的全服公告插件，支持定时�
 ```text
 /noti 服务器将在十分钟后重新启动，请大家提前保存物品
 /notice 今晚八点将开启限时活动，欢迎大家参加
+```
+
+消息中可以使用 `\n` 或 MiniMessage 的 `<newline>` 换行。例如：
+
+```text
+/notice &e第一行\n&b第二行
 ```
 
 ## 自动公告
@@ -68,7 +74,7 @@ announcement:
 separator: " "
 ```
 
-修改后执行 `/noticrreload` 即可立即刷新三个内容库、提示消息和公告时间范围。
+修改后执行 `/noticereload` 即可立即刷新三个内容库、提示消息和公告时间范围。
 
 ## 颜色和文字格式
 
@@ -78,6 +84,7 @@ separator: " "
 - 十六进制颜色：`&#12ABEF`
 - Bungee 风格十六进制：`&x&1&2&A&B&E&F`
 - MiniMessage：`<red>`、`<#12ABEF>`、`<gradient:red:blue>渐变</gradient>`
+- 换行：`\n`、`<newline>`
 
 前缀颜色会延续到后续正文，正文中的新颜色可以覆盖它。MiniMessage 仅开放文字格式，不允许点击命令、悬浮事件或 NBT 等交互标签。
 

@@ -72,7 +72,7 @@ public final class SimpMCNoticePlugin extends JavaPlugin implements TabExecutor 
         settings = loadSettings();
         registerCommand("noti");
         registerCommand("notice");
-        registerCommand("noticrreload");
+        registerCommand("noticereload");
         logPoolWarnings(settings);
         restartAnnouncementSchedule();
     }
@@ -106,7 +106,7 @@ public final class SimpMCNoticePlugin extends JavaPlugin implements TabExecutor 
                     settings.fixedPrefixes(),
                     settings.noticeUsage(),
                     settings.emptyFixedPrefixes());
-            case "noticrreload" -> reloadCommand(sender, args);
+            case "noticereload" -> reloadCommand(sender, args);
             default -> false;
         };
     }
@@ -139,7 +139,7 @@ public final class SimpMCNoticePlugin extends JavaPlugin implements TabExecutor 
 
     private boolean reloadCommand(CommandSender sender, String[] args) {
         if (args.length != 0) {
-            sender.sendMessage(parseFormattedText("&c用法: /noticrreload"));
+            sender.sendMessage(parseFormattedText("&c用法: /noticereload"));
             return true;
         }
 
@@ -276,7 +276,11 @@ public final class SimpMCNoticePlugin extends JavaPlugin implements TabExecutor 
     }
 
     static Component parseFormattedText(String text) {
-        return MINI_MESSAGE.deserialize(convertLegacyCodes(text));
+        return MINI_MESSAGE.deserialize(convertLegacyCodes(expandEscapedNewlines(text)));
+    }
+
+    static String expandEscapedNewlines(String text) {
+        return text.replace("\\n", "\n");
     }
 
     static String convertLegacyCodes(String text) {

@@ -15,9 +15,10 @@ commands:
     description: 使用固定前缀库广播自定义内容
     usage: /notice <内容>
     permission: simpmc.notice.notice
-  noticrreload:
+  noticereload:
+    aliases: [noticrreload]
     description: 重载 SimpMC-Notice 配置和三个内容库
-    usage: /noticrreload
+    usage: /noticereload
     permission: simpmc.notice.reload
 
 permissions:
@@ -28,5 +29,5 @@ permissions:
     description: 允许使用 /notice
     default: op
   simpmc.notice.reload:
-    description: 允许使用 /noticrreload
+    description: 允许使用 /noticereload
     default: op

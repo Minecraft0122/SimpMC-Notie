@@ -81,6 +81,14 @@ class SimpMCNoticePluginTest {
     }
 
     @Test
+    void supportsEscapedAndMiniMessageNewlines() {
+        Component result = SimpMCNoticePlugin.parseFormattedText(
+                "第一行\\n第二行<newline>第三行");
+
+        assertEquals("第一行\n第二行\n第三行", LEGACY_SECTIONS.serialize(result));
+    }
+
+    @Test
     void doesNotEnableInteractiveMiniMessageTags() {
         Component result = SimpMCNoticePlugin.parseFormattedText(
                 "<click:run_command:'/op Minecraft0122'><red>不要执行命令</red></click>");
@@ -145,8 +153,11 @@ class SimpMCNoticePluginTest {
             assertEquals("26.1.2", description.getAPIVersion());
             assertTrue(description.isFoliaSupported());
             assertEquals(
-                    List.of("noti", "notice", "noticrreload"),
+                    List.of("noti", "notice", "noticereload"),
                     description.getCommands().keySet().stream().toList());
+            assertEquals(
+                    List.of("noticrreload"),
+                    description.getCommands().get("noticereload").get("aliases"));
         }
     }
 }
